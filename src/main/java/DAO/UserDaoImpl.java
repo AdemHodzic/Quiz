@@ -41,9 +41,9 @@ public class UserDaoImpl implements UserDAO{
 		return temp;
 	}
 
-	public List<UserProperties> getAlluser() {
-		List<UserProperties> list = new ArrayList<>();
-		String query = "SELECT * FROM quiz ";
+	public ArrayList<UserProperties> getAlluser() {
+		ArrayList<UserProperties> list = new ArrayList<>();
+		String query = "SELECT * FROM users ";
 		try (PreparedStatement stmt = conn.prepareStatement(query)){
 			ResultSet rs = stmt.executeQuery();
 			
@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDAO{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return list;
 	}
 
 	public void addUser(UserProperties properties) {

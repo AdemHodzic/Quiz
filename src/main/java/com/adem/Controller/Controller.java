@@ -7,15 +7,15 @@ import Entities.User;
 public class Controller {
 	
 	
-	private static WindowController windowController = new WindowController();
+	private static WindowController windowController;
 	
 	private static User user;
 	
-	private Controller() {
-		
+	public Controller() {
+		windowController = new WindowController();
 	}
 	
-	public static void start() {
+	public  void start() {
 		windowController.start();
 	}
 	
