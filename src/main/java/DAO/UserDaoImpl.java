@@ -17,10 +17,11 @@ public class UserDaoImpl implements UserDAO{
 
 	public UserProperties getUser(UserProperties properties) {
 		UserProperties temp = new UserProperties();
-		String query = "SELECT * FROM quiz WHERE name=?";
+		String query = "SELECT * FROM users WHERE name=?";
 		try (PreparedStatement stmt = conn.prepareStatement(query)){
+			stmt.setString(1, properties.getName());
 			ResultSet rs = stmt.executeQuery();
-			
+			rs.next();
 			int id = rs.getInt("id");
 			String name = rs.getString("name");
 			String password = rs.getString("password");
