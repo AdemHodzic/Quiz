@@ -56,7 +56,7 @@ public class Login implements Window{
 			if(isAdmin(userProperties))
 				Controller.start(ADMIN_MENU_POSITION);
 			else {
-				Controller.setUser(new User(userProperties));
+				Controller.setUser(new User(database.getUser(userProperties)));
 				Controller.start(MAIN_MENU_POSITION);
 				}
 		else

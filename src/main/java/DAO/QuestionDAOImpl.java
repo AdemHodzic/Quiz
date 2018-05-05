@@ -131,25 +131,36 @@ public class QuestionDAOImpl implements QuestionsDAO{
 
 	private Answer[] makeAnswers(String correctText, String wrong1, String wrong2, String wrong3) {
 		
+		Answer[] arr = new Answer[4];
+		ArrayList<Answer> list = new ArrayList<>(); // We need to randomize answers in array
+		int randomIndex = (int)(Math.random()*4);
+		
 		Answer correct = new Answer();
 		correct.setText(correctText);
 		correct.setCorrect(true);
 		
 		Answer wrongOne = new Answer();
-		correct.setText(wrong1);
-		correct.setCorrect(false);
+		wrongOne.setText(wrong1);
+		wrongOne.setCorrect(false);
 		
 		Answer wrongTwo = new Answer();
-		correct.setText(wrong2);
-		correct.setCorrect(false);
+		wrongTwo.setText(wrong2);
+		wrongTwo.setCorrect(false);
 		
 		Answer wrongThree = new Answer();
-		correct.setText(wrong3);
-		correct.setCorrect(false);
+		wrongThree.setText(wrong3);
+		wrongThree.setCorrect(false);
 		
-		Answer[] answers = {correct, wrongOne, wrongTwo, wrongThree};
+		list.add(wrongOne);
+		list.add(wrongTwo);
+		list.add(wrongThree);
+		list.add(randomIndex, correct);
 		
-		return answers;
+		for(int i = 0;i<list.size();i++) {
+			arr[i] = list.get(i);
+		}
+		
+		return arr;
 	}
 
 	

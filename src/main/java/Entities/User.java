@@ -45,5 +45,13 @@ public class User {
 	public void setBest(int best) {
 		this.userProperties.setBest(best);
 	}
+	public UserProperties getUserProperties() {
+		return userProperties;
+	}
+	public void setUserProperties(UserProperties userProperties) {
+		this.userProperties = userProperties;
+	}
+	
+	
 
 }
