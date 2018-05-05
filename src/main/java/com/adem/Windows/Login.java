@@ -86,6 +86,7 @@ public class Login implements Window{
 	}
 	
 	private void quit() {
+		System.out.println("See you another time.");
 		System.exit(0);
 	}
 	

@@ -1,6 +1,6 @@
 package Entities;
 
-public class UserProperties {
+public class UserProperties implements Comparable<UserProperties>{
 	
 	private int id;
 	private String name;
@@ -50,6 +50,11 @@ public class UserProperties {
 
 	public void setBest(int best) {
 		this.best = best;
+	}
+
+	@Override
+	public int compareTo(UserProperties o) {
+		return this.getBest() - o.getBest();
 	}
 	
 	
