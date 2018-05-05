@@ -6,6 +6,7 @@ import java.util.Scanner;
 import com.adem.Controller.Controller;
 
 import DAO.UserDaoImpl;
+import Entities.User;
 import Entities.UserProperties;
 
 public class Login implements Window{
@@ -54,22 +55,16 @@ public class Login implements Window{
 		if(exists(userProperties))
 			if(isAdmin(userProperties))
 				Controller.start(ADMIN_MENU_POSITION);
-			else
+			else {
+				Controller.setUser(new User(userProperties));
 				Controller.start(MAIN_MENU_POSITION);
+				}
 		else
 			System.out.println("Wrong input!\nTry Again."); 
 			
 	}
 	
-	private boolean isAdmin(UserProperties userProperties) {
-		UserProperties temp = new UserProperties();
-		temp.setName("Admin");
-		UserProperties admin = database.getUser(temp);
-		
-		if(admin.getName().equals(userProperties.getName()) && admin.getPassword().equals(userProperties.getPassword()))
-			return true;
-		return false;
-	}
+	
 
 	private void register() {
 		Scanner input = new Scanner(System.in);
@@ -84,6 +79,7 @@ public class Login implements Window{
 		
 		if(!exists(userProperties)) {
 			database.addUser(userProperties);
+			Controller.setUser(new User(userProperties));
 			Controller.start(MAIN_MENU_POSITION);
 		}else
 			System.out.println("There is already an account with those properties!\nTry again.");
@@ -91,6 +87,16 @@ public class Login implements Window{
 	
 	private void quit() {
 		System.exit(0);
+	}
+	
+	private boolean isAdmin(UserProperties userProperties) {
+		UserProperties temp = new UserProperties();
+		temp.setName("Admin");
+		UserProperties admin = database.getUser(temp);
+		
+		if(admin.getName().equals(userProperties.getName()) && admin.getPassword().equals(userProperties.getPassword()))
+			return true;
+		return false;
 	}
 	
 	private boolean exists(UserProperties user) {
