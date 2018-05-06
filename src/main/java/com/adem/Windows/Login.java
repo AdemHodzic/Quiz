@@ -8,6 +8,9 @@ import com.adem.Controller.Controller;
 import DAO.UserDaoImpl;
 import Entities.User;
 import Entities.UserProperties;
+import events.Invoker;
+import events.LoginCommand;
+import events.RegisterCommand;
 
 public class Login implements Window{
 
@@ -15,6 +18,7 @@ public class Login implements Window{
 	private final int MAIN_MENU_POSITION = 1;
 	private final int ADMIN_MENU_POSITION = 5;
 	private UserDaoImpl database = new UserDaoImpl();
+	private Invoker invoker;
 	
 	@Override
 	public void start() {
@@ -32,82 +36,20 @@ public class Login implements Window{
 			choice = input.nextInt();
 		}while(choice < 1 || choice > 3);
 		
-		if(choice == 1)
-			login();
-		else if(choice == 2)
-			register();
-		else
+		if(choice == 1) {
+			invoker = new Invoker(new LoginCommand());
+			invoker.execute();
+		}else if(choice == 2) {
+			invoker = new Invoker(new RegisterCommand());
+			invoker.execute();
+		}else
 			quit();
 		}
-	}
-	
-	private void login() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Enter your name: ");
-		String name = input.nextLine();
-		System.out.println("Enter your password: ");
-		String password = input.nextLine();
-		
-		UserProperties userProperties = new UserProperties();
-		userProperties.setName(name);
-		userProperties.setPassword(password);
-		
-		if(exists(userProperties))
-			if(isAdmin(userProperties))
-				Controller.start(ADMIN_MENU_POSITION);
-			else {
-				Controller.setUser(new User(database.getUser(userProperties)));
-				Controller.start(MAIN_MENU_POSITION);
-				}
-		else
-			System.out.println("Wrong input!\nTry Again."); 
-			
-	}
-	
-	
-
-	private void register() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Enter your name: ");
-		String name = input.nextLine();
-		System.out.println("Enter your password: ");
-		String password = input.nextLine();
-		
-		UserProperties userProperties = new UserProperties();
-		userProperties.setName(name);
-		userProperties.setPassword(password);
-		
-		if(!exists(userProperties)) {
-			database.addUser(userProperties);
-			Controller.setUser(new User(userProperties));
-			Controller.start(MAIN_MENU_POSITION);
-		}else
-			System.out.println("There is already an account with those properties!\nTry again.");
 	}
 	
 	private void quit() {
 		System.out.println("See you another time.");
 		System.exit(0);
-	}
-	
-	private boolean isAdmin(UserProperties userProperties) {
-		UserProperties temp = new UserProperties();
-		temp.setName("Admin");
-		UserProperties admin = database.getUser(temp);
-		
-		if(admin.getName().equals(userProperties.getName()) && admin.getPassword().equals(userProperties.getPassword()))
-			return true;
-		return false;
-	}
-	
-	private boolean exists(UserProperties user) {
-		ArrayList<UserProperties> list = database.getAlluser();
-		for(UserProperties temp : list) {
-			//Checks if there is userproperty with same name and password in db
-			if(temp.getName().equals(user.getName()) && temp.getPassword().equals(user.getPassword()))
-				return true;
-		}
-		return false;
 	}
 
 }

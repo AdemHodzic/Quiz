@@ -19,7 +19,7 @@ public class Controller {
 		windowController.start();
 	}
 	
-	public static void start(int index) {
+	public  void start(int index) {
 		windowController.start(index);
 	}
 
@@ -27,7 +27,7 @@ public class Controller {
 		return user;
 	}
 
-	public static void setUser(User user) {
+	public  void setUser(User user) {
 		Controller.user = user;
 	}
 	

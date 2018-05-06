@@ -9,12 +9,17 @@ import DAO.UserDaoImpl;
 import Entities.Answer;
 import Entities.Question;
 import Entities.UserProperties;
+import events.AddQuesitonCommand;
+import events.DeleteUserCommand;
+import events.EditQuestionCommand;
+import events.Invoker;
+import events.LogOutCommand;
 
 public class AdminMenu implements Window{
 	
 	private QuestionDAOImpl database = new QuestionDAOImpl();
-	private UserDaoImpl userDatabase = new UserDaoImpl();
 	private final int LOGIN_POSITION = 0; //It would be better if I used Enum but oh well..
+	private Invoker invoker;
 	
 	public AdminMenu() {}
 	
@@ -36,16 +41,20 @@ public class AdminMenu implements Window{
 			
 			switch(choice) {
 				case 1:
-					addQuestion();
+					invoker = new Invoker(new AddQuesitonCommand());
+					invoker.execute();
 					break;
 				case 2:
-					editQuestion();
+					invoker = new Invoker(new EditQuestionCommand());
+					invoker.execute();
 					break;
 				case 3:
-					deleteUser();
+					invoker = new Invoker(new DeleteUserCommand());
+					invoker.execute();
 					break;
 				case 4:
-					logout();
+					invoker = new Invoker(new LogOutCommand());
+					invoker.execute();
 					break;
 				case 5:
 					quit();
@@ -53,86 +62,9 @@ public class AdminMenu implements Window{
 			}
 		}
 	}
-	
-	private void addQuestion() {
-		Question question = new Question();
-		
-		Scanner input = new Scanner(System.in);
-		
-		editQuestionText(question);
-		editAnswers(question);
-		
-		database.addQuestion(question);
-		
-	}
 
-	private void editQuestion() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Enter the id of the question you want to change: ");
-		int id = input.nextInt();
-		Question question = database.getQuestion(id);
-		
-		editQuestionText(question);
-		editAnswers(question);
-		
-		database.editQuestion(question);
-	}
-	
-	
-
-	private void deleteUser() {
-		Scanner input = new Scanner(System.in);
-		System.out.println("Enter the name of the user you want to delete: ");
-		String name = input.nextLine();
-		UserProperties props = new UserProperties();
-		props.setName(name);
-		
-		userDatabase.deleteUser(props);
-	}
-	
-	private void logout() {
-		Controller.start(LOGIN_POSITION);
-	}
-	
 	private void quit() {
 		System.exit(0);
 	}
 	
-	private void editAnswers(Question question) {
-		Scanner input = new Scanner(System.in);
-
-		Answer[] arr = question.getAnswers();
-		boolean correctInserted = false;
-		for(int i = 0;i<4;i++) {
-			Answer ans = arr[i];
-			System.out.println("Enter the text and answer will be changed (enter -1 to keep it same): ");
-			String ansText = input.nextLine();
-			if(!ansText.equals("-1".trim())) {
-				ans.setText(ansText);
-			}
-			
-			if(!correctInserted) {
-				System.out.println("Is this answer correct (y/n)? ");
-				String yesorno = input.nextLine();
-				if(yesorno.equals("y")) {
-					ans.setCorrect(true);
-					correctInserted = true;
-				}else{
-					ans.setCorrect(false);
-				}
-			}
-			
-		}
-	
-	}
-
-	private void editQuestionText(Question question) {
-	
-		Scanner input = new Scanner(System.in);
-		System.out.println("Enter the text and quesiton will be changed (enter -1 to keep it same): ");
-		String text = input.nextLine();
-		if(!text.equals("-1".trim())){
-			question.setText(text);
-		}
-	}
 }

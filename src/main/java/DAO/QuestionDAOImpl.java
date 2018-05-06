@@ -16,7 +16,7 @@ public class QuestionDAOImpl implements QuestionsDAO{
 	
 	@Override
 	public void addQuestion(Question question) {
-		String query = "INSERT INTO questions(text, correct, wrong1, wrong2, wrong3) VFALUES(?,?,?,?,?)";
+		String query = "INSERT INTO questions(text, correct, wrong1, wrong2, wrong3) VALUES(?,?,?,?,?)";
 		try(PreparedStatement stmt = conn.prepareStatement(query)) {
 			Answer[] answers = question.getAnswers();
 			stmt.setString(1, question.getText());
